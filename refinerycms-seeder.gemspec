@@ -19,9 +19,6 @@ can be referenced in the templates using a helper.}
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'refinerycms-pages', '~> 2.1'
-  s.add_runtime_dependency 'refinerycms-images', '~> 2.1'
-
   s.add_development_dependency 'rspec'
 
 end
