@@ -41,7 +41,7 @@ describe Refinery::Seeder::DSL do
     end
 
     it "allows setting page attributes in the block" do
-      expect(page_builder).to receive(:slug=).twice.and_call_original
+      expect(page_builder).to receive(:slug=).and_call_original.twice
 
       dsl.evaluate do
         page(*page_args) do
