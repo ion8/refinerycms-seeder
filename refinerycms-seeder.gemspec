@@ -19,6 +19,7 @@ can be referenced in the templates using a helper.}
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  s.add_dependency 'i18n', "~> 0.6.9"
   s.add_development_dependency 'rspec'
 
 end
