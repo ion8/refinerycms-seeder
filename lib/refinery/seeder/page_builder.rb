@@ -8,14 +8,6 @@ module Refinery
         @attributes = attributes.merge(title: title)
       end
 
-      def template_path
-        File.join(
-          Refinery::Seeder.template_root,
-          'pages',
-          @title.underscored_word
-        )
-      end
-
       def build
         begin
           require 'refinery/pages'

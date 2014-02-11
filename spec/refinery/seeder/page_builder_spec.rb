@@ -14,15 +14,6 @@ describe Refinery::Seeder::PageBuilder do
     subject.attributes.should == { title: "Home Page", slug: 'home' }
   end
 
-  it "has a template path" do
-    expect(Refinery::Seeder).to receive(:template_root).and_return('ROOT')
-    subject.template_path.should == File.join(
-      'ROOT',
-      'pages',
-      subject.title.underscored_word
-    )
-  end
-
   context "it builds a page object" do
     let(:page) { subject.build }
 
