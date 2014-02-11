@@ -22,6 +22,15 @@ describe Refinery::Seeder::Images::ImageLoader do
     it "collects paths to images" do
       paths = subject.collect_image_paths
       paths.length.should == 3
+      paths.to_set.should == [
+        "blue.PNG", "green.png", File.join("subdir", "red.png")
+      ].map { |filename| File.join(subject.images_root, filename) }.to_set
+    end
+
+    it "loads images" do
+      images = subject.load_images
+      images.length.should == 3
+      images['blue.PNG'].should be_a File
     end
   end
 end

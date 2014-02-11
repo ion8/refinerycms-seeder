@@ -19,6 +19,14 @@ module Refinery::Seeder
           )
         end
       end
+
+      def load_images
+        Hash[
+          collect_image_paths.map do |path|
+            [path.gsub(/^#{images_root}#{File::SEPARATOR}+/, ''), File.new(path)]
+          end
+        ]
+      end
     end
   end
 end
