@@ -27,7 +27,15 @@ describe Refinery::Seeder::PageBuilder do
       subject.build
     end
 
-    it "sets attributes on an existing page"
+    it "sets attributes on an existing page" do
+      some_page = double("page")
+      attributes.each do |attr, value|
+        expect(some_page).to receive(:"#{attr}=").with(value)
+      end
+      expect(some_page).to receive(:save!)
+      expect(Refinery::Page).to receive(:by_title).and_return some_page
+      subject.build
+    end
   end
 
 end
