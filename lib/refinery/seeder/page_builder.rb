@@ -1,3 +1,5 @@
+require 'refinery/pages'
+
 module Refinery
   module Seeder
     class PageBuilder
@@ -9,18 +11,6 @@ module Refinery
       end
 
       def build
-        begin
-          require 'refinery/pages'
-        rescue LoadError
-          Struct.new(*(@attributes.keys + ['id'])).new(*(@attributes.values + [@title]))
-        else
-          refinery_build
-        end
-      end
-
-      private
-
-      def refinery_build
         page = Refinery::Page.by_title(@title)
 
         if page.nil?

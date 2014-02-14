@@ -1,30 +1,33 @@
 require 'spec_helper'
+require 'refinery/pages'
 require 'refinery/seeder/page_builder'
 
 
 describe Refinery::Seeder::PageBuilder do
   let(:title) { "Home Page" }
-  let(:attributes) { { slug: 'home' } }
+  let(:slug) { 'home' }
+  let(:attributes) { { title: title, slug: slug } }
 
   subject do
-    Refinery::Seeder::PageBuilder.new(title, attributes)
+    Refinery::Seeder::PageBuilder.new(title, { slug: slug })
   end
 
   it "should store its attributes" do
-    subject.attributes.should == { title: "Home Page", slug: 'home' }
+    subject.attributes.should == attributes
   end
 
-  context "it builds a page object" do
-    let(:page) { subject.build }
-
-    it "assigns the stored attributes to the page object" do
-      page.title.should == "Home Page"
-      page.slug.should == 'home'
+  context "builds pages" do
+    before :each do
+      stub_const 'Refinery::Page', double('Refinery::Page')
     end
 
-    it "builds page objects that have an id" do
-      page.id.should_not be_empty
+    it "builds a new Page if it does not exist" do
+      expect(Refinery::Page).to receive(:by_title).and_return nil
+      expect(Refinery::Page).to receive(:create!).with(attributes)
+      subject.build
     end
+
+    it "sets attributes on an existing page"
   end
 
 end
