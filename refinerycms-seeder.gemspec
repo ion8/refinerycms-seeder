@@ -20,6 +20,9 @@ can be referenced in the templates using a helper.}
   s.require_paths = ["lib"]
 
   s.add_dependency 'i18n', "~> 0.6.9"
+  s.add_dependency 'refinerycms-pages', '~> 2.1'
+  s.add_dependency 'refinerycms-images', '~> 2.1'
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec-rails'
 
 end
