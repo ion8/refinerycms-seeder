@@ -13,7 +13,6 @@ describe Refinery::Seeder::PagePartBuilder do
 
   it "stores its attributes" do
     subject.attributes.should == {
-      refinery_page_id: page.id,
       title: title,
       position: attributes[:position]
     }
@@ -22,6 +21,7 @@ describe Refinery::Seeder::PagePartBuilder do
   end
 
   context "template search paths" do
+
     before :each do
       Refinery::Seeder.should respond_to :resources_root
       allow(Refinery::Seeder).to receive(:resources_root).and_return File.join(
@@ -66,6 +66,28 @@ describe Refinery::Seeder::PagePartBuilder do
       it "returns nil when no template is found" do
         subject.title = "does not exist"
         subject.render_body.should be_nil
+      end
+    end
+
+    context "builds page parts" do
+      let(:merged_attributes) do
+        attributes.merge(title: title, body: subject.render_body)
+      end
+
+      it "builds a new PagePart if it doesn't exist" do
+        expect(page).to receive(:part_with_title).with(title).and_return nil
+        parts_relation = double("parts relation")
+        expect(page).to receive(:parts).and_return parts_relation
+        expect(parts_relation).to receive(:create!).with(merged_attributes).
+          and_return :a_new_page
+        subject.build.should be :a_new_page
+      end
+
+      it "sets attributes on an existing PagePart" do
+        page_part = double("existing page part")
+        expect(page).to receive(:part_with_title).with(title).and_return page_part
+        expect(page_part).to receive(:update!).with(merged_attributes)
+        subject.build.should be page_part
       end
     end
 
