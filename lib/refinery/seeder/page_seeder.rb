@@ -1,4 +1,3 @@
-require 'erb'
 require 'refinery/pages'
 require 'refinery/images'
 
