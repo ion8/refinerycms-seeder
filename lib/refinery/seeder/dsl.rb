@@ -16,7 +16,6 @@ module Refinery
       def initialize(methods, instance = nil)
         extend methods
         define_singleton_method(:instance) { instance }
-        self
       end
 
       def evaluate(&block)
