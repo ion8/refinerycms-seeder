@@ -3,6 +3,8 @@ module Refinery::Seeder
     class ImageLoadError < IOError; end
 
     class ImageLoader
+      IMAGE_FILE_RE = Regexp.compile(/\.(png|jpe?g|gif)$/i)
+
       def images_root
         File.join(Refinery::Seeder.resources_root, 'images')
       end
@@ -14,9 +16,7 @@ module Refinery::Seeder
         end
 
         Dir[File.join(images_root, '**/*')].select do |file|
-          File.file?(file) && File.readable?(file) && (
-            file =~ /\.(png|jpe?g|gif)$/i
-          )
+          File.file?(file) && File.readable?(file) && file =~ IMAGE_FILE_RE
         end
       end
 
