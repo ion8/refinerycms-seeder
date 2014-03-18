@@ -15,7 +15,7 @@ module Refinery
       end
 
       @@resources_root = File.expand_path(
-        File.join('lib', 'seeds'),
+        File.join('app', 'seeds'),
         defined?(Rails) ? Rails.root : '.'
       )
     end

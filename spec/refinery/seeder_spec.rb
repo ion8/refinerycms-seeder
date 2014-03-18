@@ -4,7 +4,7 @@ require 'refinery/seeder'
 
 describe Refinery::Seeder do
   it "returns a default template search path" do
-    subject.resources_root.should end_with('lib/seeds')
+    subject.resources_root.should end_with('app/seeds')
   end
 
   it "allows setting the template search path" do
