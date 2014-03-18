@@ -28,7 +28,7 @@ describe Refinery::Seeder::Images::ImageLoader do
     end
 
     it "loads images" do
-      images = subject.load_images
+      images = subject.load_image_files
       images.length.should == 3
       images['blue.PNG'].should be_a File
     end
