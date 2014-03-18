@@ -16,11 +16,10 @@ module Refinery
         if page.nil?
           page = Refinery::Page.create!(@attributes)
         else
-          @attributes.each do |name, value|
-            page.send("#{name}=", value)
-          end
-          page.save!
+          page.update!(@attributes)
         end
+
+        page
       end
     end
   end
