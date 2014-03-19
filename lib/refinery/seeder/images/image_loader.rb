@@ -3,7 +3,13 @@ module Refinery::Seeder
     class ImageLoadError < IOError; end
 
     class ImageLoader
+      attr_accessor :images
+
       IMAGE_FILE_RE = Regexp.compile(/\.(png|jpe?g|gif)$/i)
+
+      def initialize
+        @images = {}
+      end
 
       def images_root
         File.join(Refinery::Seeder.resources_root, 'images')
@@ -20,12 +26,28 @@ module Refinery::Seeder
         end
       end
 
-      def load_image_files
+      ##
+      # returns a hash mapping paths (relative to the images_root)
+      # to File handles of the corresponding images.
+      def collect_image_files
         Hash[
           collect_image_paths.map do |path|
             [path.gsub(/^#{images_root}#{File::SEPARATOR}+/, ''), File.new(path)]
           end
         ]
+      end
+
+      ##
+      # Loads a hash mapping paths (relative to the images_root)
+      # to persisted Refinery::Image references into the +images+
+      # instance attribute, and returns it.
+      def load_images
+        @images = Hash[
+          collect_image_files.map do |path, file|
+            [path, Refinery::Image.create!(image: file)]
+          end
+        ]
+        @images
       end
     end
   end

@@ -19,18 +19,39 @@ describe Refinery::Seeder::Images::ImageLoader do
       )
     end
 
+    let(:paths) { ["blue.PNG", "green.png", File.join("subdir", "red.png")] }
+    let(:long_paths) { paths.map { |p| File.join(subject.images_root, p) } }
+    let(:files) { long_paths.map { |p| File.new(p) } }
+
     it "collects paths to images" do
       paths = subject.collect_image_paths
       paths.length.should == 3
-      paths.to_set.should == [
-        "blue.PNG", "green.png", File.join("subdir", "red.png")
-      ].map { |filename| File.join(subject.images_root, filename) }.to_set
+      paths.to_set.should == long_paths.to_set
     end
 
-    it "loads images" do
-      images = subject.load_image_files
-      images.length.should == 3
-      images['blue.PNG'].should be_a File
+    it "collects file references to images" do
+      expect(subject).to receive(:collect_image_paths).once.
+        and_return long_paths
+      file_map = subject.collect_image_files
+      file_map.keys.to_set.should == paths.to_set
+      file_map['green.png'].should be_a File
+    end
+
+    it "creates Refinery::Image records with the files" do
+      allow(subject).to receive(:collect_image_files).
+        and_return Hash[paths.zip files]
+
+      stub_const('Refinery::Image', refinery_image = double('Refinery::Image'))
+
+      files = subject.collect_image_files
+
+      files.each do |path, file|
+        expect(refinery_image).to receive(:create!). with(image: file)
+      end
+
+      images = subject.load_images
+      images.should be subject.images
+      images.length.should == paths.length
     end
   end
 end
