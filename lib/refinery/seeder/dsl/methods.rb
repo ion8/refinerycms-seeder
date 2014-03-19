@@ -24,9 +24,7 @@ module Refinery
       module RootMethods
         def page(title, attributes = {}, &block)
           page = PageBuilder.new(title, attributes)
-          if block_given?
-            DSL.new(PageMethods, page).evaluate(&block)
-          end
+          DSL.new(PageMethods, page).evaluate(&block)
           page.build
         end
       end
