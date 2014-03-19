@@ -1,8 +1,11 @@
 require 'erb'
+require 'refinery/seeder/images/image_helper'
 
 
 module Refinery::Seeder
   class PagePartBuilder
+    include ImageHelper
+
     attr_accessor :attributes, :page, :title
 
     def initialize(page, title, attributes = {})
@@ -29,7 +32,7 @@ module Refinery::Seeder
 
     def render_body
       return nil if template_path.nil?
-      ERB.new(File.read(template_path)).result
+      ERB.new(File.read(template_path)).result(binding)
     end
 
     def build
