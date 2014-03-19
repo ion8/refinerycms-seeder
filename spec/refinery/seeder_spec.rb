@@ -13,4 +13,10 @@ describe Refinery::Seeder do
     subject.resources_root.should == '.'
     subject.resources_root = old_root
   end
+
+  it "it provides an entrypoint classmethod, seed" do
+    stub_const('Refinery::Seeder::DSL', dsl = double('DSL'))
+    expect(dsl).to receive(:evaluate).once
+    Refinery::Seeder.seed {}
+  end
 end
