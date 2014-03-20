@@ -1,7 +1,7 @@
 module Refinery::Seeder
   module ImageHelper
     def insert_image(name, geometry = nil, options = {})
-      img = @images.fetch(name)
+      img = images.fetch(name)
       title = img.title
 
       img = thumbnail(geometry: geometry) unless geometry.nil?
