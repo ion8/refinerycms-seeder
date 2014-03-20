@@ -8,6 +8,8 @@ describe Refinery::Seeder::DSL do
   let(:dsl) { Refinery::Seeder::DSL }
 
   it "executes a block in the context of itself" do
+    expect(dsl).to receive(:new).once.and_call_original
+
     dsl.evaluate do
       # this also tests that methods in the outer context
       # are also available in the block (due to let(:dsl))
@@ -32,27 +34,47 @@ describe Refinery::Seeder::DSL do
       stub_const('Refinery::Seeder::PageBuilder', page_builder_class)
     end
 
-    it "creates a PageBuilder instance and exposes it through #page" do
-      allow(page_builder).to receive(:writable?).and_return false
+    context "page with no parts" do
 
-      dsl.evaluate do
-        page(*page_args) do
-          page.should be page_builder
+      before :each do
+        expect(dsl).to receive(:new).twice.and_call_original
+      end
+
+      it "creates a PageBuilder instance and exposes it through #page" do
+        # Gotta work around rspec's magic here
+        # not testing the dynamic writers to act like you have
+        # no writable attributes
+        allow(page_builder).to receive(:writable?).and_return false
+
+        dsl.evaluate do
+          page(*page_args) do
+            page.should be page_builder
+          end
         end
       end
-    end
 
-    it "allows setting page attributes in the block" do
-      expect(page_builder).to receive(:writable?).with(:slug).
-        and_return true
-      expect(page_builder).to receive(:set).twice
+      it "allows setting page attributes in the block with #set" do
+        expect(page_builder).to receive(:set).with(:slug, 'some-slug')
 
-      dsl.evaluate do
-        page(*page_args) do
-          slug 'custom-slug'
-          set :slug, 'another-slug'
+        dsl.evaluate do
+          page(*page_args) do
+            set :slug, 'some-slug'
+          end
         end
       end
+
+      it "allows setting page attributes in the block with dynamic writers" do
+        expect(page_builder).to receive(:set).with(:slug, 'another-slug')
+        allow(page_builder).to receive(:writable?).
+          with(:slug).and_return true
+
+        dsl.evaluate do
+          page(*page_args) do
+            slug 'another-slug'
+          end
+        end
+      end
+
     end
 
     context "page part syntax" do
