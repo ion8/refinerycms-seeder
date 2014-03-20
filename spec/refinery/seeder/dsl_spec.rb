@@ -108,6 +108,16 @@ describe Refinery::Seeder::DSL do
       end
     end
 
+    it "will clean parts if clean_parts! is called in the definition" do
+      expect(page_builder).to receive(:will_clean_parts=).with(true)
+
+      dsl.evaluate do
+        page(*page_args) do
+          clean_parts!
+        end
+      end
+    end
+
   end
 
   it "loads images" do
