@@ -4,11 +4,12 @@ require 'refinery/pages'
 module Refinery
   module Seeder
     class PageBuilder
-      attr_accessor :attributes, :title
+      attr_accessor :attributes, :title, :part_builders
 
       def initialize(title, attributes = {})
         @title = title
         @attributes = attributes.merge(title: title)
+        @part_builders = []
       end
 
       def writable?(attribute)
@@ -22,6 +23,10 @@ module Refinery
         else
           raise ArgumentError, "Can't write #{attribute} attribute"
         end
+      end
+
+      def add_part(part_builder)
+        @part_builders << part_builder
       end
 
       def build

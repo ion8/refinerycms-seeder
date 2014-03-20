@@ -56,6 +56,12 @@ describe Refinery::Seeder::PageBuilder do
       stub_const 'Refinery::Page', double('Refinery::Page')
     end
 
+    it "manages a list of contained parts to build" do
+      page_part_builder = double("page_part_builder")
+      subject.add_part(page_part_builder)
+      subject.part_builders.should include page_part_builder
+    end
+
     it "builds a new Page if it does not exist" do
       expect(Refinery::Page).to receive(:by_title).and_return nil
       expect(Refinery::Page).to receive(:create!).with(attributes).
