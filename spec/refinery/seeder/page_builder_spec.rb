@@ -68,6 +68,7 @@ describe Refinery::Seeder::PageBuilder do
         and_return :a_new_page
       expect(subject).to receive(:build_parts)
       subject.build.should be :a_new_page
+      subject.page.should be :a_new_page
     end
 
     it "sets attributes on an existing page" do
@@ -76,6 +77,7 @@ describe Refinery::Seeder::PageBuilder do
       expect(some_page).to receive(:update_attributes!).with(attributes)
       expect(subject).to receive(:build_parts)
       subject.build.should be some_page
+      subject.page.should be some_page
     end
   end
 

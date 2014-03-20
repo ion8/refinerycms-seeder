@@ -4,7 +4,7 @@ require 'refinery/pages'
 module Refinery
   module Seeder
     class PageBuilder
-      attr_accessor :attributes, :title, :part_builders
+      attr_accessor :attributes, :title, :page, :part_builders
 
       def initialize(title, attributes = {})
         @title = title
