@@ -27,6 +27,11 @@ module Refinery
           DSL.new(PageMethods, page).evaluate(&block)
           page.build
         end
+
+        def load_images
+          image_loader = Images::ImageLoader.new
+          @images = image_loader.load_images
+        end
       end
 
       module PageMethods

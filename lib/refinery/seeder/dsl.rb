@@ -32,11 +32,6 @@ module Refinery
         @block_self.send(method, *args, &block)
       end
 
-      def load_images
-        image_loader = Images::ImageLoader.new
-        @images = image_loader.load_images
-      end
-
     end
   end
 end
