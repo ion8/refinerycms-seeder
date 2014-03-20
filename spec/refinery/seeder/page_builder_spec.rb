@@ -108,6 +108,13 @@ describe Refinery::Seeder::PageBuilder do
       expect(page.parts[1]).to receive(:destroy)
       subject.clean_parts!.should == 1
     end
+
+    it "kept part title names are case insensitive" do
+      subject.page = page
+      subject.keep_part page.parts[0].title.upcase
+      expect(page.parts[1]).to receive(:destroy)
+      subject.clean_parts!.should == 1
+    end
   end
 
 end
