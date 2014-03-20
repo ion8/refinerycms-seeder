@@ -5,10 +5,10 @@ require 'refinery/seeder/page_part_builder'
 describe Refinery::Seeder::PagePartBuilder do
   let(:title) { "Body" }
   let(:attributes) { { position: 1 } }
-  let(:page) { double("Page", title: 'About Us', id: :the_page_id) }
+  let(:page_builder) { double("Page", title: 'About Us', id: :the_page_id) }
 
   subject do
-    Refinery::Seeder::PagePartBuilder.new(page, title, attributes)
+    Refinery::Seeder::PagePartBuilder.new(page_builder, title, attributes)
   end
 
   it "stores its attributes" do
@@ -17,7 +17,7 @@ describe Refinery::Seeder::PagePartBuilder do
       position: attributes[:position]
     }
     subject.title.should == title
-    subject.page.should == page
+    subject.page_builder.should == page_builder
   end
 
   context "template search paths" do
@@ -41,7 +41,7 @@ describe Refinery::Seeder::PagePartBuilder do
     it "derives a search path to a template for its body" do
       template_search_path.should start_with Refinery::Seeder.resources_root
       template_search_path.should include title.underscored_word
-      template_search_path.should include page.title.underscored_word
+      template_search_path.should include page_builder.title.underscored_word
       template_search_path.should end_with '.*'
     end
 
@@ -70,24 +70,29 @@ describe Refinery::Seeder::PagePartBuilder do
     end
 
     context "builds page parts" do
-      let(:merged_attributes) do
-        attributes.merge(title: title, body: subject.render_body)
+
+      context "when part doesn't exist" do
+        let(:parts) { double("parts", create!: :a_new_part) }
+        let(:page) { double("page", part_with_title: nil, parts: parts) }
+
+        it "creates a new PagePart" do
+          subject.build(page).should be :a_new_part
+        end
+
+        it "renders the body and stores it in @attributes" do
+          subject.build(page)
+          subject.attributes.should include :body
+        end
       end
 
-      it "builds a new PagePart if it doesn't exist" do
-        expect(page).to receive(:part_with_title).with(title).and_return nil
-        parts_relation = double("parts relation")
-        expect(page).to receive(:parts).and_return parts_relation
-        expect(parts_relation).to receive(:create!).with(merged_attributes).
-          and_return :a_new_page
-        subject.build.should be :a_new_page
-      end
+      context "when part already exists" do
+        let(:part) { double("part", update_attributes!: :pretended_to_update) }
+        let(:page) { double("page", part_with_title: part) }
 
-      it "sets attributes on an existing PagePart" do
-        page_part = double("existing page part")
-        expect(page).to receive(:part_with_title).with(title).and_return page_part
-        expect(page_part).to receive(:update!).with(merged_attributes)
-        subject.build.should be page_part
+        it "sets attributes on an existing PagePart" do
+          expect(part).to receive(:update_attributes!)
+          subject.build(page).should be part
+        end
       end
     end
 

@@ -1,4 +1,5 @@
 require 'erb'
+require 'refinery/seeder/ext'
 require 'refinery/seeder/images/image_helper'
 
 
@@ -6,10 +7,10 @@ module Refinery::Seeder
   class PagePartBuilder
     include ImageHelper
 
-    attr_accessor :attributes, :page, :title
+    attr_accessor :attributes, :page_builder, :title
 
-    def initialize(page, title, attributes = {})
-      @page = page
+    def initialize(page_builder, title, attributes = {})
+      @page_builder = page_builder
       @title = title
       @attributes = attributes.merge(title: title)
     end
@@ -21,7 +22,7 @@ module Refinery::Seeder
     def template_search_path
       File.join(
         templates_root,
-        @page.title.underscored_word,
+        @page_builder.title.underscored_word,
         "#{@title.underscored_word}.*"
       )
     end
@@ -35,15 +36,17 @@ module Refinery::Seeder
       ERB.new(File.read(template_path)).result(binding)
     end
 
-    def build
-      @attributes.merge!(body: render_body)
-      part = @page.part_with_title(title)
+    def build(page)
+      @attributes.merge! body: render_body
+      part = page.part_with_title(title)
 
       if part.nil?
-        part = @page.parts.create!(@attributes)
+        part = page.parts.create!(@attributes)
       else
-        part.update!(@attributes)
+        part.update_attributes!(@attributes)
       end
+
+      @page_builder.keep_part part
 
       part
     end
