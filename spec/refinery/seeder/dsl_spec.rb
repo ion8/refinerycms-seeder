@@ -98,7 +98,7 @@ describe Refinery::Seeder::DSL do
         end
       end
 
-      it "allows parts to be kept by title which aren't defined" do
+      it "allows parts to be kept by title, without defining it" do
         expect(page_builder).to receive(:keep_part).with('Body')
 
         dsl.evaluate do
