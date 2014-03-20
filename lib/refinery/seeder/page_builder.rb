@@ -38,7 +38,15 @@ module Refinery
           page.update_attributes!(@attributes)
         end
 
-        page
+        @page = page
+        build_parts
+        @page
+      end
+
+      def build_parts
+        @part_builders.each do |part_builder|
+          part_builder.build(@page)
+        end
       end
     end
   end

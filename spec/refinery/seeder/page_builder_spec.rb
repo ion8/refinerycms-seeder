@@ -66,6 +66,7 @@ describe Refinery::Seeder::PageBuilder do
       expect(Refinery::Page).to receive(:by_title).and_return [nil]
       expect(Refinery::Page).to receive(:create!).with(attributes).
         and_return :a_new_page
+      expect(subject).to receive(:build_parts)
       subject.build.should be :a_new_page
     end
 
@@ -73,6 +74,7 @@ describe Refinery::Seeder::PageBuilder do
       some_page = double("page")
       expect(Refinery::Page).to receive(:by_title).and_return [some_page]
       expect(some_page).to receive(:update_attributes!).with(attributes)
+      expect(subject).to receive(:build_parts)
       subject.build.should be some_page
     end
   end
