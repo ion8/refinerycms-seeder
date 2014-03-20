@@ -41,6 +41,10 @@ module Refinery
         def keep_part(part_title)
           builder.keep_part part_title
         end
+
+        def clean_parts!
+          builder.will_clean_parts = true
+        end
       end
 
     end
