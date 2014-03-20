@@ -9,6 +9,7 @@ describe Refinery::Seeder::DSL do
 
   it "executes a block in the context of itself" do
     expect(dsl).to receive(:new).once.and_call_original
+    expect(dsl::RootMethods).to receive(:extended)
 
     dsl.evaluate do
       # this also tests that methods in the outer context
@@ -25,6 +26,8 @@ describe Refinery::Seeder::DSL do
     let(:page_args) { ['Home Page', { slug: 'home' }] }
 
     before :each do
+      expect(dsl).to receive(:new).twice.and_call_original
+      expect(dsl::PageMethods).to receive(:extended)
       expect(page_builder_class).to(
         receive(:new).once
         .with(*page_args)
@@ -35,10 +38,6 @@ describe Refinery::Seeder::DSL do
     end
 
     context "page with no parts" do
-
-      before :each do
-        expect(dsl).to receive(:new).twice.and_call_original
-      end
 
       it "creates a PageBuilder instance and exposes it through #page" do
         # Gotta work around rspec's magic here
@@ -80,7 +79,6 @@ describe Refinery::Seeder::DSL do
     context "defining a part within a page block" do
 
       before :each do
-        expect(dsl).to receive(:new).twice.and_call_original
         page_part_builder = double("page_part_builder")
         stub_const 'Refinery::Seeder::PagePartBuilder',
           double('PagePartBuilder', new: page_part_builder)
@@ -110,5 +108,17 @@ describe Refinery::Seeder::DSL do
       end
     end
 
+  end
+
+  it "loads images" do
+    image_loader = double("image_loader")
+    stub_const("Refinery::Seeder::Images::ImageLoader",
+               double("ImageLoader", new: image_loader))
+
+    expect(image_loader).to receive(:load_images).once
+
+    dsl.evaluate do
+      load_images
+    end
   end
 end
