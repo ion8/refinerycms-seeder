@@ -1,5 +1,12 @@
+require 'refinery/seeder/images/image_loader'
+
+
 module Refinery::Seeder::Images
   module ImageHelper
+    def images
+      Refinery::Seeder::Images::ImageLoader.images
+    end
+
     def insert_image(name, geometry = nil, options = {})
       img = images.fetch(name)
       title = img.title

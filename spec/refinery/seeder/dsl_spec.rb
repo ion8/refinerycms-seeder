@@ -121,11 +121,11 @@ describe Refinery::Seeder::DSL do
   end
 
   it "loads images" do
-    image_loader = double("image_loader")
+    #image_loader = double("image_loader")
     stub_const("Refinery::Seeder::Images::ImageLoader",
-               double("ImageLoader", new: image_loader))
+               double("ImageLoader", load_images: {}))
 
-    expect(image_loader).to receive(:load_images).once
+    expect(Refinery::Seeder::Images::ImageLoader).to receive(:load_images).once
 
     dsl.evaluate do
       load_images

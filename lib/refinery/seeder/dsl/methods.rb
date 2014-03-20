@@ -24,8 +24,7 @@ module Refinery
         end
 
         def load_images
-          image_loader = Images::ImageLoader.new
-          @images = image_loader.load_images
+          Images::ImageLoader.load_images
         end
       end
 

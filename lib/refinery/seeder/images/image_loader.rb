@@ -7,6 +7,19 @@ module Refinery::Seeder
 
       IMAGE_FILE_RE = Regexp.compile(/\.(png|jpe?g|gif)$/i)
 
+      def self.load_images
+        @@loader = new
+        @@loader.load_images
+      end
+
+      def self.loader
+        @@loader
+      end
+
+      def self.images
+        @@loader.images
+      end
+
       def initialize
         @images = {}
       end
