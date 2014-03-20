@@ -40,12 +40,6 @@ module Refinery
         end
       end
 
-      module PagePartMethods
-        include DynamicWriterMethods
-
-        def part; instance end
-      end
-
     end
   end
 end
