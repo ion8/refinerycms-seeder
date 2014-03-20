@@ -12,8 +12,24 @@ describe Refinery::Seeder::PageBuilder do
     Refinery::Seeder::PageBuilder.new(title, { slug: slug })
   end
 
-  it "should store its attributes" do
-    subject.attributes.should == attributes
+  context "attributes specification" do
+    it "should store its attributes from initialization" do
+      subject.attributes.should == attributes
+    end
+
+    it "exposes which attributes are writable" do
+      accessible_attributes = %w(title foo bar)
+      refinery_page = double("Refinery::Page",
+                             accessible_attributes: accessible_attributes)
+      stub_const('Refinery::Page', refinery_page)
+
+      # can't overwrite title
+      subject.writable?('title').should be_false
+
+      subject.writable?('foo').should be_true
+      subject.writable?('bar').should be_true
+      subject.writable?('baz').should be_false
+    end
   end
 
   context "builds pages" do

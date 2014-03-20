@@ -1,5 +1,6 @@
 require 'refinery/pages'
 
+
 module Refinery
   module Seeder
     class PageBuilder
@@ -8,6 +9,11 @@ module Refinery
       def initialize(title, attributes = {})
         @title = title
         @attributes = attributes.merge(title: title)
+      end
+
+      def writable?(attribute)
+        return false if attribute.to_s == 'title'
+        Refinery::Page.accessible_attributes.include? attribute
       end
 
       def build
