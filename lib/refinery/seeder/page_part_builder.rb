@@ -46,8 +46,6 @@ module Refinery::Seeder
         part.update_attributes!(@attributes)
       end
 
-      @page_builder.keep_part part
-
       part
     end
   end
