@@ -81,4 +81,33 @@ describe Refinery::Seeder::PageBuilder do
     end
   end
 
+  context "only keeps parts that are defined or kept explicitly" do
+    let(:page) do
+      double("page", parts: [
+        double("one part", id: 1),
+        double("another part", id: 2)
+      ])
+    end
+
+    it "clean_parts! when page isn't set yet is a no-op" do
+      subject.page.should be_nil
+      subject.clean_parts!.should be_false
+    end
+
+    it "clean_parts! destroys unkept parts" do
+      subject.page = page
+      page.parts.each do |p|
+        expect(p).to receive(:destroy)
+      end
+      subject.clean_parts!.should == 2
+    end
+
+    it "#keep_part adds to a list of parts that should be kept" do
+      subject.page = page
+      subject.keep_part page.parts[0]
+      expect(page.parts[1]).to receive(:destroy)
+      subject.clean_parts!.should == 1
+    end
+  end
+
 end

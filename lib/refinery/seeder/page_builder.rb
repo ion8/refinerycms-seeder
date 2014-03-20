@@ -10,6 +10,7 @@ module Refinery
         @title = title
         @attributes = attributes.merge(title: title)
         @part_builders = []
+        @kept_part_ids = []
       end
 
       def writable?(attribute)
@@ -46,6 +47,21 @@ module Refinery
       def build_parts
         @part_builders.each do |part_builder|
           part_builder.build(@page)
+        end
+      end
+
+      def keep_part(part)
+        @kept_part_ids << part.id unless part.nil?
+      end
+
+      def clean_parts!
+        if @page.nil?
+          false
+        else
+          parts_to_destroy = @page.parts.
+            reject { |part| @kept_part_ids.include?(part.id) }
+          parts_to_destroy.each(&:destroy)
+          parts_to_destroy.length
         end
       end
     end
