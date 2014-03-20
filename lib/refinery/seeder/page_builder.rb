@@ -46,7 +46,8 @@ module Refinery
 
       def build_parts
         @part_builders.each do |part_builder|
-          part_builder.build(@page)
+          part = part_builder.build(@page)
+          keep_part part.title
         end
       end
 

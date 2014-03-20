@@ -37,6 +37,10 @@ module Refinery
         def part(title, attributes = {})
           page.add_part PagePartBuilder.new(page, title, attributes)
         end
+
+        def keep_part(part_title)
+          builder.keep_part part_title
+        end
       end
 
     end

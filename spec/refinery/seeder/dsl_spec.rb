@@ -79,19 +79,31 @@ describe Refinery::Seeder::DSL do
 
     context "defining a part within a page block" do
 
-      it "defines a part to build with #part" do
-        part_args = ['Body', {}]
+      before :each do
+        expect(dsl).to receive(:new).twice.and_call_original
         page_part_builder = double("page_part_builder")
         stub_const 'Refinery::Seeder::PagePartBuilder',
           double('PagePartBuilder', new: page_part_builder)
+      end
 
-        expect(dsl).to receive(:new).twice.and_call_original
+      it "defines a part to build with #part" do
+        part_args = ['Body', {}]
 
         expect(page_builder).to receive(:add_part)
 
         dsl.evaluate do
           page(*page_args) do
             part(*part_args)
+          end
+        end
+      end
+
+      it "allows parts to be kept by title which aren't defined" do
+        expect(page_builder).to receive(:keep_part).with('Body')
+
+        dsl.evaluate do
+          page(*page_args) do
+            keep_part 'Body'
           end
         end
       end

@@ -79,6 +79,19 @@ describe Refinery::Seeder::PageBuilder do
       subject.build.should be some_page
       subject.page.should be some_page
     end
+
+    it "builds parts and designates them to be kept after clean_parts!" do
+      subject.add_part(
+        double("body part builder",
+               build: double("body part", title: "Body")))
+      subject.add_part(
+        double("side part builder",
+               build: double("side part", title: "Side Body")))
+
+      expect(subject).to receive(:keep_part).with("Body")
+      expect(subject).to receive(:keep_part).with("Side Body")
+      subject.build_parts
+    end
   end
 
   context "only keeps parts that are defined or kept explicitly" do
