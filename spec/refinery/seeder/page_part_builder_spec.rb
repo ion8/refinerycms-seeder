@@ -76,7 +76,9 @@ describe Refinery::Seeder::PagePartBuilder do
         let(:page) { double("page", part_with_title: nil, parts: parts) }
 
         it "creates a new PagePart" do
+          subject.part.should be_nil
           subject.build(page).should be :a_new_part
+          subject.part.should be :a_new_part
         end
 
         it "renders the body and stores it in @attributes" do
@@ -86,12 +88,14 @@ describe Refinery::Seeder::PagePartBuilder do
       end
 
       context "when part already exists" do
-        let(:part) { double("part", update_attributes!: :pretended_to_update) }
+        let(:part) { double("part", update_attributes!: :pretended_to) }
         let(:page) { double("page", part_with_title: part) }
 
         it "sets attributes on an existing PagePart" do
+          subject.part.should be_nil
           expect(part).to receive(:update_attributes!)
           subject.build(page).should be part
+          subject.part.should be part
         end
       end
     end

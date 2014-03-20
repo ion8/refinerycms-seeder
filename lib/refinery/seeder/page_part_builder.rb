@@ -7,7 +7,7 @@ module Refinery::Seeder
   class PagePartBuilder
     include ImageHelper
 
-    attr_accessor :attributes, :page_builder, :title
+    attr_accessor :attributes, :page_builder, :part, :title
 
     def initialize(page_builder, title, attributes = {})
       @page_builder = page_builder
@@ -46,7 +46,7 @@ module Refinery::Seeder
         part.update_attributes!(@attributes)
       end
 
-      part
+      @part = part
     end
   end
 end
