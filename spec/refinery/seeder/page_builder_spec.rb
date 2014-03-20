@@ -13,15 +13,20 @@ describe Refinery::Seeder::PageBuilder do
   end
 
   context "attributes specification" do
+    before :each do
+      # the accessible attributes array has indifferent access
+      # but it's not worth testing, so this is all dealing with Strings.
+      accessible_attributes = %w(title foo bar)
+      refinery_page = double("Refinery::Page",
+                             accessible_attributes: accessible_attributes)
+      stub_const('Refinery::Page', refinery_page)
+    end
+
     it "should store its attributes from initialization" do
       subject.attributes.should == attributes
     end
 
     it "exposes which attributes are writable" do
-      accessible_attributes = %w(title foo bar)
-      refinery_page = double("Refinery::Page",
-                             accessible_attributes: accessible_attributes)
-      stub_const('Refinery::Page', refinery_page)
 
       # can't overwrite title
       subject.writable?('title').should be_false
@@ -29,6 +34,20 @@ describe Refinery::Seeder::PageBuilder do
       subject.writable?('foo').should be_true
       subject.writable?('bar').should be_true
       subject.writable?('baz').should be_false
+    end
+
+    it "doesn't allow title to be overwritten" do
+      expect { subject.set 'title', 'new title' }.to raise_error(ArgumentError)
+    end
+
+    it "doesn't allow non-accessible attributes to be overwritten" do
+      expect { subject.set 'baz', 123 }.to raise_error(ArgumentError)
+    end
+
+    it "allows attributes to be set" do
+      subject.attributes['foo'].should be_nil
+      subject.set 'foo', 123
+      subject.attributes['foo'].should == 123
     end
   end
 

@@ -16,6 +16,14 @@ module Refinery
         Refinery::Page.accessible_attributes.include? attribute
       end
 
+      def set(attribute, value)
+        if writable? attribute
+          @attributes[attribute] = value
+        else
+          raise ArgumentError, "Can't write #{attribute} attribute"
+        end
+      end
+
       def build
         page = Refinery::Page.by_title(@title)
 
