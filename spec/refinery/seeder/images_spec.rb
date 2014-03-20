@@ -11,6 +11,44 @@ describe Refinery::Seeder::Images::ImageLoader do
     subject.images_root.should end_with 'images'
   end
 
+  context "insert_image helper for use in templates" do
+    let(:image) do
+      double("Refinery::Image",
+             title: 'Name',
+             width: 80,
+             height: 40,
+             url: 'http://example.com/name.jpg')
+    end
+
+    let(:helpers) do
+      Object.new.extend(Refinery::Seeder::Images::ImageHelper)
+    end
+
+    before :each do
+      allow(image).to receive(:thumbnail).and_return image
+      img = image
+      helpers.send(:define_singleton_method, :images) {{ 'name.jpg' => img }}
+    end
+
+    it "basic invocation" do
+      img_tag = helpers.insert_image('name.jpg')
+
+      img_tag.should include "src=\"#{image.url}\""
+      img_tag.should include 'title="Name"'
+    end
+
+    it "invocation with geometry" do
+      expect(image).to receive(:thumbnail).with(geometry: :small).
+        and_return image
+      helpers.insert_image('name.jpg', :small)
+    end
+
+    it "invocation with options" do
+      img_tag = helpers.insert_image('name.jpg', nil, { alt: 'some alt text' })
+      img_tag.should include 'alt="some alt text"'
+    end
+  end
+
   context "loads images" do
     before :each do
       allow(Refinery::Seeder).to receive(:resources_root).and_return File.join(

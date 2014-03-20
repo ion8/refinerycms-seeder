@@ -5,7 +5,7 @@ require 'refinery/seeder/images/image_helper'
 
 module Refinery::Seeder
   class PagePartBuilder
-    include ImageHelper
+    include Images::ImageHelper
 
     attr_accessor :attributes, :page_builder, :part, :title
 
