@@ -63,7 +63,7 @@ describe Refinery::Seeder::PageBuilder do
     end
 
     it "builds a new Page if it does not exist" do
-      expect(Refinery::Page).to receive(:by_title).and_return nil
+      expect(Refinery::Page).to receive(:by_title).and_return [nil]
       expect(Refinery::Page).to receive(:create!).with(attributes).
         and_return :a_new_page
       subject.build.should be :a_new_page
@@ -71,8 +71,8 @@ describe Refinery::Seeder::PageBuilder do
 
     it "sets attributes on an existing page" do
       some_page = double("page")
-      expect(Refinery::Page).to receive(:by_title).and_return some_page
-      expect(some_page).to receive(:update!).with(attributes)
+      expect(Refinery::Page).to receive(:by_title).and_return [some_page]
+      expect(some_page).to receive(:update_attributes!).with(attributes)
       subject.build.should be some_page
     end
   end

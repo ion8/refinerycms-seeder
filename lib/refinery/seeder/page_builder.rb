@@ -30,12 +30,12 @@ module Refinery
       end
 
       def build
-        page = Refinery::Page.by_title(@title)
+        page = Refinery::Page.by_title(@title).first
 
         if page.nil?
           page = Refinery::Page.create!(@attributes)
         else
-          page.update!(@attributes)
+          page.update_attributes!(@attributes)
         end
 
         page
