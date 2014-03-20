@@ -10,7 +10,7 @@ module Refinery
         @title = title
         @attributes = attributes.merge(title: title)
         @part_builders = []
-        @kept_part_ids = []
+        @kept_part_titles = []
       end
 
       def writable?(attribute)
@@ -50,16 +50,17 @@ module Refinery
         end
       end
 
-      def keep_part(part)
-        @kept_part_ids << part.id unless part.nil?
+      def keep_part(part_title)
+        @kept_part_titles << part_title
       end
 
       def clean_parts!
         if @page.nil?
           false
         else
-          parts_to_destroy = @page.parts.
-            reject { |part| @kept_part_ids.include?(part.id) }
+          parts_to_destroy = @page.parts.reject do |part|
+            @kept_part_titles.map(&:downcase).include?(part.title.downcase)
+          end
           parts_to_destroy.each(&:destroy)
           parts_to_destroy.length
         end

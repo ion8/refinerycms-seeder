@@ -84,8 +84,8 @@ describe Refinery::Seeder::PageBuilder do
   context "only keeps parts that are defined or kept explicitly" do
     let(:page) do
       double("page", parts: [
-        double("one part", id: 1),
-        double("another part", id: 2)
+        double("one part", title: "one part"),
+        double("another part", title: "another part")
       ])
     end
 
@@ -104,7 +104,7 @@ describe Refinery::Seeder::PageBuilder do
 
     it "#keep_part adds to a list of parts that should be kept" do
       subject.page = page
-      subject.keep_part page.parts[0]
+      subject.keep_part page.parts[0].title
       expect(page.parts[1]).to receive(:destroy)
       subject.clean_parts!.should == 1
     end
