@@ -12,14 +12,17 @@ describe Refinery::Seeder::PageBuilder do
     Refinery::Seeder::PageBuilder.new(title, { slug: slug })
   end
 
+  before :each do
+    stub_const 'Refinery::Page', double('Refinery::Page')
+  end
+
   context "attributes specification" do
     before :each do
       # the accessible attributes array has indifferent access
       # but it's not worth testing, so this is all dealing with Strings.
       accessible_attributes = %w(title foo bar)
-      refinery_page = double("Refinery::Page",
-                             accessible_attributes: accessible_attributes)
-      stub_const('Refinery::Page', refinery_page)
+      allow(Refinery::Page).to receive(:accessible_attributes).
+        and_return accessible_attributes
     end
 
     it "should store its attributes from initialization" do
@@ -52,10 +55,6 @@ describe Refinery::Seeder::PageBuilder do
   end
 
   context "builds pages" do
-    before :each do
-      stub_const 'Refinery::Page', double('Refinery::Page')
-    end
-
     it "manages a list of contained parts to build" do
       page_part_builder = double("page_part_builder")
       subject.add_part(page_part_builder)
@@ -127,6 +126,29 @@ describe Refinery::Seeder::PageBuilder do
       subject.keep_part page.parts[0].title.upcase
       expect(page.parts[1]).to receive(:destroy)
       subject.clean_parts!.should == 1
+    end
+
+    context "it cleans parts after build" do
+
+      before :each do
+        allow(Refinery::Page).to receive(:by_title).and_return [nil]
+        allow(Refinery::Page).to receive(:create!)
+      end
+
+      it "does not call clean_parts! by default" do
+        subject.will_clean_parts.should be_false
+        expect(subject).to receive(:will_clean_parts?).and_call_original
+        expect(subject).to_not receive(:clean_parts!)
+        subject.build
+      end
+
+      it "will call clean_parts! if will_clean_parts is set to true" do
+        subject.will_clean_parts = true
+        expect(subject).to receive(:will_clean_parts?).and_call_original
+        expect(subject).to receive(:clean_parts!)
+        subject.build
+      end
+
     end
   end
 
