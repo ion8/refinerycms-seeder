@@ -35,8 +35,7 @@ module Refinery
         def page; builder end
 
         def part(title, attributes = {})
-          part_builder = PagePartBuilder.new(title, attributes)
-          part_builder.build
+          page.add_part PagePartBuilder.new(page, title, attributes)
         end
       end
 

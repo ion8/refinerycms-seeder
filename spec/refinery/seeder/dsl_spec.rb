@@ -77,24 +77,17 @@ describe Refinery::Seeder::DSL do
 
     end
 
-    context "page part syntax" do
-      it "creates a PagePartBuilder instance and exposes it through #part" do
+    context "defining a part within a page block" do
+
+      it "defines a part to build with #part" do
         part_args = ['Body', {}]
-        page_part_builder_class = double("PagePartBuilder")
-        page_part_builder = double("PagePartBuilder")
+        page_part_builder = double("page_part_builder")
+        stub_const 'Refinery::Seeder::PagePartBuilder',
+          double('PagePartBuilder', new: page_part_builder)
 
-        expect(page_part_builder_class).to(
-          receive(:new).once
-          .with(*part_args)
-          .and_return(page_part_builder)
-        )
+        expect(dsl).to receive(:new).twice.and_call_original
 
-        expect(page_part_builder).to receive(:build).once
-
-        stub_const(
-          'Refinery::Seeder::PagePartBuilder',
-          page_part_builder_class
-        )
+        expect(page_builder).to receive(:add_part)
 
         dsl.evaluate do
           page(*page_args) do
@@ -102,8 +95,7 @@ describe Refinery::Seeder::DSL do
           end
         end
       end
+
     end
-
   end
-
 end
