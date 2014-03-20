@@ -4,28 +4,23 @@ module Refinery
 
       module DynamicWriterMethods
         def set(attribute, value)
-          page.send("#{attribute}=", value)
+          builder.set(attribute, value)
         end
 
         def method_missing(meth, *args, &block)
-          writable?(meth) ? set(meth, *args) : super
+          builder.writable?(meth) ? set(meth, *args) : super
         end
 
         def respond_to?(meth)
-          instance.respond_to?("#{meth}=") || super
-        end
-
-        private
-        def writable?(attribute)
-          instance.respond_to? "#{attribute}="
+          builder.writable?(meth) || super
         end
       end
 
       module RootMethods
         def page(title, attributes = {}, &block)
-          page = PageBuilder.new(title, attributes)
-          DSL.new(PageMethods, page).evaluate(&block)
-          page.build
+          page_builder = PageBuilder.new(title, attributes)
+          DSL.new(PageMethods, page_builder).evaluate(&block)
+          page_builder.build
         end
 
         def load_images
@@ -37,14 +32,11 @@ module Refinery
       module PageMethods
         include DynamicWriterMethods
 
-        def page; instance end
+        def page; builder end
 
         def part(title, attributes = {})
-          part = PagePartBuilder.new(title, attributes)
-          if block_given?
-            DSL.new(PagePartMethods, part).evaluate(&block)
-          end
-          part.build
+          part_builder = PagePartBuilder.new(title, attributes)
+          part_builder.build
         end
       end
 

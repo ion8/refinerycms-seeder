@@ -19,7 +19,7 @@ describe Refinery::Seeder::DSL do
   context "page syntax" do
 
     let(:page_builder_class) { double('PageBuilder') }
-    let(:page_builder) { Struct.new(:title, :slug).new }
+    let(:page_builder) { double("page_builder") }
     let(:page_args) { ['Home Page', { slug: 'home' }] }
 
     before :each do
@@ -33,6 +33,8 @@ describe Refinery::Seeder::DSL do
     end
 
     it "creates a PageBuilder instance and exposes it through #page" do
+      allow(page_builder).to receive(:writable?).and_return false
+
       dsl.evaluate do
         page(*page_args) do
           page.should be page_builder
@@ -41,15 +43,14 @@ describe Refinery::Seeder::DSL do
     end
 
     it "allows setting page attributes in the block" do
-      expect(page_builder).to receive(:slug=).and_call_original.twice
+      expect(page_builder).to receive(:writable?).with(:slug).
+        and_return true
+      expect(page_builder).to receive(:set).twice
 
       dsl.evaluate do
         page(*page_args) do
           slug 'custom-slug'
-          (page_builder.slug.should == 'custom-slug')
-
           set :slug, 'another-slug'
-          (page_builder.slug.should == 'another-slug')
         end
       end
     end

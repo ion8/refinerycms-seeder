@@ -16,9 +16,9 @@ module Refinery
         end
       end
 
-      def initialize(methods, instance = nil)
+      def initialize(methods, builder = nil)
         extend methods
-        define_singleton_method(:instance) { instance }
+        define_singleton_method(:builder) { builder }
         @images = {}
       end
 
