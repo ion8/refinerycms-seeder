@@ -1,13 +1,13 @@
 require 'spec_helper'
-require 'refinery/seeder/images'
+require 'refinery/seeds/images'
 
 
-describe Refinery::Seeder::Images::ImageLoader do
-  subject { Refinery::Seeder::Images::ImageLoader.new }
+describe Refinery::Seeds::Images::ImageLoader do
+  subject { Refinery::Seeds::Images::ImageLoader.new }
 
   it "has an image root path" do
     subject.images_root.should_not be_empty
-    subject.images_root.should start_with Refinery::Seeder.resources_root
+    subject.images_root.should start_with Refinery::Seeds.resources_root
     subject.images_root.should end_with 'images'
   end
 
@@ -21,7 +21,7 @@ describe Refinery::Seeder::Images::ImageLoader do
     end
 
     let(:helpers) do
-      Object.new.extend(Refinery::Seeder::Images::ImageHelper)
+      Object.new.extend(Refinery::Seeds::Images::ImageHelper)
     end
 
     before :each do
@@ -51,7 +51,7 @@ describe Refinery::Seeder::Images::ImageLoader do
 
   context "loads images" do
     before :each do
-      allow(Refinery::Seeder).to receive(:resources_root).and_return File.join(
+      allow(Refinery::Seeds).to receive(:resources_root).and_return File.join(
         File.expand_path('../../..', __FILE__), # spec/
         'resources'
       )

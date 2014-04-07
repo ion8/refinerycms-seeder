@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'refinery/seeder'
+require 'refinery/seeds'
 
 
-describe Refinery::Seeder do
+describe Refinery::Seeds do
   it "returns a default template search path" do
     subject.resources_root.should end_with('app/seeds')
   end
@@ -15,8 +15,8 @@ describe Refinery::Seeder do
   end
 
   it "it provides an entrypoint classmethod, seed" do
-    stub_const('Refinery::Seeder::DSL', dsl = double('DSL'))
+    stub_const('Refinery::Seeds::DSL', dsl = double('DSL'))
     expect(dsl).to receive(:evaluate).once
-    Refinery::Seeder.seed {}
+    Refinery::Seeds.seed {}
   end
 end

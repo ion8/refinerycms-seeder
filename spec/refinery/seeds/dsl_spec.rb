@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'refinery/seeder/dsl'
-require 'refinery/seeder/page_builder'
+require 'refinery/seeds/dsl'
+require 'refinery/seeds/page_builder'
 
 
-describe Refinery::Seeder::DSL do
+describe Refinery::Seeds::DSL do
 
-  let(:dsl) { Refinery::Seeder::DSL }
+  let(:dsl) { Refinery::Seeds::DSL }
 
   it "executes a block in the context of itself" do
     expect(dsl).to receive(:new).once.and_call_original
@@ -34,7 +34,7 @@ describe Refinery::Seeder::DSL do
         .and_return(page_builder)
       )
       expect(page_builder).to receive(:build).once
-      stub_const('Refinery::Seeder::PageBuilder', page_builder_class)
+      stub_const('Refinery::Seeds::PageBuilder', page_builder_class)
     end
 
     context "page with no parts" do
@@ -80,7 +80,7 @@ describe Refinery::Seeder::DSL do
 
       before :each do
         page_part_builder = double("page_part_builder")
-        stub_const 'Refinery::Seeder::PagePartBuilder',
+        stub_const 'Refinery::Seeds::PagePartBuilder',
           double('PagePartBuilder', new: page_part_builder)
       end
 
@@ -122,10 +122,10 @@ describe Refinery::Seeder::DSL do
 
   it "loads images" do
     #image_loader = double("image_loader")
-    stub_const("Refinery::Seeder::Images::ImageLoader",
+    stub_const("Refinery::Seeds::Images::ImageLoader",
                double("ImageLoader", load_images: {}))
 
-    expect(Refinery::Seeder::Images::ImageLoader).to receive(:load_images).once
+    expect(Refinery::Seeds::Images::ImageLoader).to receive(:load_images).once
 
     dsl.evaluate do
       load_images

@@ -1,15 +1,15 @@
 $:.push File.expand_path("../lib", __FILE__)
-require "refinery/seeder/version"
+require "refinery/seeds/version"
 
 Gem::Specification.new do |s|
-  s.name = "refinerycms-seeder"
-  s.version = Refinery::Seeder::VERSION
+  s.name = "refinerycms-seeds"
+  s.version = Refinery::Seeds::VERSION
   s.authors = ["Mat Allen"]
   s.email = ["mat@ion8.net"]
-  s.homepage = "https://github.com/ion8/refinerycms-seeder"
+  s.homepage = "https://github.com/ion8/refinerycms-seeds"
   s.summary = %q{A quick little DSL for seeding RefineryCMS Pages.}
   s.description = %q{
-Refinery Seeder provides a DSL for defining Refinery CMS Pages and PageParts
+Refinery::Seeds provides a DSL for defining Refinery CMS Pages and PageParts
 to load when seeding (rake db:seed). The contents of each PagePart are
 loaded from templates based on a naming convention, and images are loaded and
 can be referenced in the templates using a helper.}

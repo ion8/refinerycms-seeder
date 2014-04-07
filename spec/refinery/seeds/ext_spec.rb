@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'refinery/seeder/ext'
+require 'refinery/seeds/ext'
 
 
 describe String do

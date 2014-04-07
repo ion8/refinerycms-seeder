@@ -1,10 +1,10 @@
-require 'refinery/seeder/images/image_loader'
+require 'refinery/seeds/images/image_loader'
 
 
-module Refinery::Seeder::Images
+module Refinery::Seeds::Images
   module ImageHelper
     def images
-      Refinery::Seeder::Images::ImageLoader.images
+      Refinery::Seeds::Images::ImageLoader.images
     end
 
     def insert_image(name, geometry = nil, options = {})

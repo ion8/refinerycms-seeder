@@ -1,14 +1,14 @@
 require 'spec_helper'
-require 'refinery/seeder/page_part_builder'
+require 'refinery/seeds/page_part_builder'
 
 
-describe Refinery::Seeder::PagePartBuilder do
+describe Refinery::Seeds::PagePartBuilder do
   let(:title) { "Body" }
   let(:attributes) { { position: 1 } }
   let(:page_builder) { double("Page", title: 'About Us', id: :the_page_id) }
 
   subject do
-    Refinery::Seeder::PagePartBuilder.new(page_builder, title, attributes)
+    Refinery::Seeds::PagePartBuilder.new(page_builder, title, attributes)
   end
 
   it "stores its attributes" do
@@ -23,8 +23,8 @@ describe Refinery::Seeder::PagePartBuilder do
   context "template search paths" do
 
     before :each do
-      Refinery::Seeder.should respond_to :resources_root
-      allow(Refinery::Seeder).to receive(:resources_root).and_return File.join(
+      Refinery::Seeds.should respond_to :resources_root
+      allow(Refinery::Seeds).to receive(:resources_root).and_return File.join(
         File.expand_path('../../..', __FILE__), # spec/
         'resources'
       )
@@ -34,12 +34,12 @@ describe Refinery::Seeder::PagePartBuilder do
 
     it "has a template root path" do
       subject.templates_root.should_not be_empty
-      subject.templates_root.should start_with Refinery::Seeder.resources_root
+      subject.templates_root.should start_with Refinery::Seeds.resources_root
       subject.templates_root.should end_with 'pages'
     end
 
     it "derives a search path to a template for its body" do
-      template_search_path.should start_with Refinery::Seeder.resources_root
+      template_search_path.should start_with Refinery::Seeds.resources_root
       template_search_path.should include title.underscored_word
       template_search_path.should include page_builder.title.underscored_word
       template_search_path.should end_with '.*'

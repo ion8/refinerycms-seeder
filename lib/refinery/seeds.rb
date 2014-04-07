@@ -1,12 +1,12 @@
-require 'refinery/seeder/version'
+require 'refinery/seeds/version'
 
 
 module Refinery
-  module Seeder
-    autoload :PageBuilder,      'refinery/seeder/page_builder'
-    autoload :PagePartBuilder,  'refinery/seeder/page_part_builder'
-    autoload :Images,           'refinery/seeder/images'
-    autoload :DSL,              'refinery/seeder/dsl'
+  module Seeds
+    autoload :PageBuilder,      'refinery/seeds/page_builder'
+    autoload :PagePartBuilder,  'refinery/seeds/page_part_builder'
+    autoload :Images,           'refinery/seeds/images'
+    autoload :DSL,              'refinery/seeds/dsl'
 
     class << self
       def seed(&block)

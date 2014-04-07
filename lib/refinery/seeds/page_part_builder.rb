@@ -1,9 +1,9 @@
 require 'erb'
-require 'refinery/seeder/ext'
-require 'refinery/seeder/images/image_helper'
+require 'refinery/seeds/ext'
+require 'refinery/seeds/images/image_helper'
 
 
-module Refinery::Seeder
+module Refinery::Seeds
   class PagePartBuilder
 
     attr_accessor :attributes, :page_builder, :part, :title
@@ -15,7 +15,7 @@ module Refinery::Seeder
     end
 
     def templates_root
-      File.join(Refinery::Seeder.resources_root, 'pages')
+      File.join(Refinery::Seeds.resources_root, 'pages')
     end
 
     def template_search_path
@@ -33,7 +33,7 @@ module Refinery::Seeder
     def render_body
       return nil if template_path.nil?
       ERB.new(File.read(template_path)).result(proc do
-        extend Refinery::Seeder::Images::ImageHelper
+        extend Refinery::Seeds::Images::ImageHelper
         binding
       end.call)
     end

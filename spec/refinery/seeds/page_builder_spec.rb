@@ -1,15 +1,15 @@
 require 'spec_helper'
 require 'refinery/pages'
-require 'refinery/seeder/page_builder'
+require 'refinery/seeds/page_builder'
 
 
-describe Refinery::Seeder::PageBuilder do
+describe Refinery::Seeds::PageBuilder do
   let(:title) { "Home Page" }
   let(:slug) { 'home' }
   let(:attributes) { { title: title, slug: slug } }
 
   subject do
-    Refinery::Seeder::PageBuilder.new(title, { slug: slug })
+    Refinery::Seeds::PageBuilder.new(title, { slug: slug })
   end
 
   before :each do

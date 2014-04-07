@@ -1,4 +1,4 @@
-module Refinery::Seeder
+module Refinery::Seeds
   module Images
     class ImageLoadError < IOError; end
 
@@ -25,7 +25,7 @@ module Refinery::Seeder
       end
 
       def images_root
-        File.join(Refinery::Seeder.resources_root, 'images')
+        File.join(Refinery::Seeds.resources_root, 'images')
       end
 
       def collect_image_paths
