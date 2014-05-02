@@ -44,7 +44,7 @@ module Refinery::Seeds
 
       if part.nil?
         part = page.parts.create!(@attributes)
-      else
+      elsif ENV['FORCE'].present?
         part.update_attributes!(@attributes)
       end
 

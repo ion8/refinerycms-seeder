@@ -38,7 +38,7 @@ module Refinery::Seeds
 
       if page.nil?
         page = Refinery::Page.create!(@attributes)
-      else
+      elsif ENV['FORCE'].present?
         page.update_attributes!(@attributes)
       end
 
