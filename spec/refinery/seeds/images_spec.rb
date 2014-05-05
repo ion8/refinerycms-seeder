@@ -84,7 +84,8 @@ describe Refinery::Seeds::Images::ImageLoader do
       files = subject.collect_image_files
 
       files.each do |path, file|
-        expect(refinery_image).to receive(:create!). with(image: file)
+        expect(refinery_image).to receive(:find_by_image_uid).and_return nil
+        expect(refinery_image).to receive(:create!).with(image: file)
       end
 
       images = subject.load_images
