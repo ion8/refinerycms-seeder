@@ -46,6 +46,10 @@ module Refinery::Seeds
       @part_builders << part_builder
     end
 
+    def add_page_images(page_images_builder)
+      @page_images_builder = page_images_builder
+    end
+
     def build
       page = Refinery::Page.by_title(@title).first
 
@@ -58,6 +62,9 @@ module Refinery::Seeds
       @page = page
       build_parts
       clean_parts! if will_clean_parts?
+
+      build_page_images if @page_images_builder
+
       @page
     end
 
@@ -82,6 +89,10 @@ module Refinery::Seeds
         parts_to_destroy.each(&:destroy)
         parts_to_destroy.length
       end
+    end
+
+    def build_page_images
+      @page_images_builder.build(@page)
     end
   end
 end

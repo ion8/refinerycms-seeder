@@ -57,13 +57,7 @@ module Refinery::Seeds
       def load_images
         @images = Hash[
           collect_image_files.map do |path, file|
-            uid = "seeds:#{path}"
-            image = (
-              Refinery::Image.find_by_image_uid(uid) ||
-              Refinery::Image.create!(image: file) { |i| i.image_uid = uid }
-            )
-
-            [path, image]
+            [path, Refinery::Image.create!(image: file)]
           end
         ]
         @images

@@ -43,6 +43,10 @@ module Refinery::Seeds
       def clean_parts!
         builder.will_clean_parts = true
       end
+
+      def page_images
+        page.add_page_images PageImagesBuilder.new(page)
+      end
     end
 
   end

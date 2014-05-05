@@ -5,6 +5,7 @@ module Refinery
   module Seeds
     autoload :PageBuilder,      'refinery/seeds/page_builder'
     autoload :PagePartBuilder,  'refinery/seeds/page_part_builder'
+    autoload :PageImagesBuilder,'refinery/seeds/page_images_builder'
     autoload :Images,           'refinery/seeds/images'
     autoload :DSL,              'refinery/seeds/dsl'
 
