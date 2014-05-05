@@ -55,6 +55,11 @@ describe Refinery::Seeds::PageBuilder do
   end
 
   context "builds pages" do
+    before do
+      # TODO: test when force is not true
+      ENV['FORCE'] = 'true'
+    end
+
     it "manages a list of contained parts to build" do
       page_part_builder = double("page_part_builder")
       subject.add_part(page_part_builder)

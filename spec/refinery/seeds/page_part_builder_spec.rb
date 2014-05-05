@@ -88,6 +88,10 @@ describe Refinery::Seeds::PagePartBuilder do
       end
 
       context "when part already exists" do
+        before do
+          # TODO: test when force is not true
+          ENV['FORCE'] = 'true'
+        end
         let(:part) { double("part", update_attributes!: :pretended_to) }
         let(:page) { double("page", part_with_title: part) }
 
