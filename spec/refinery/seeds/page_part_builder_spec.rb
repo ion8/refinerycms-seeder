@@ -28,15 +28,14 @@ describe Refinery::Seeds::PagePartBuilder do
         File.expand_path('../../..', __FILE__), # spec/
         'resources'
       )
+      allow(page_builder).to receive(:template_search_path).and_return File.join(
+        Refinery::Seeds.resources_root,
+        'pages',
+        'about_us'
+      )
     end
 
     let(:template_search_path) { subject.template_search_path }
-
-    it "has a template root path" do
-      subject.templates_root.should_not be_empty
-      subject.templates_root.should start_with Refinery::Seeds.resources_root
-      subject.templates_root.should end_with 'pages'
-    end
 
     it "derives a search path to a template for its body" do
       template_search_path.should start_with Refinery::Seeds.resources_root

@@ -1,5 +1,7 @@
 require 'refinery/pages'
 
+require 'refinery/seeds/ext'
+
 
 module Refinery::Seeds
   class PageBuilder
@@ -27,6 +29,17 @@ module Refinery::Seeds
       else
         raise ArgumentError, "Can't write #{attribute} attribute"
       end
+    end
+
+    def templates_root
+      File.join(Refinery::Seeds.resources_root, 'pages')
+    end
+
+    def template_search_path
+      File.join(
+        templates_root,
+        title.underscored_word
+      )
     end
 
     def add_part(part_builder)

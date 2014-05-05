@@ -54,6 +54,23 @@ describe Refinery::Seeds::PageBuilder do
     end
   end
 
+  context "template search paths" do
+    before :each do
+      Refinery::Seeds.should respond_to :resources_root
+      allow(Refinery::Seeds).to receive(:resources_root).and_return File.join(
+        File.expand_path('../../..', __FILE__), # spec/
+        'resources'
+      )
+    end
+
+    it "has a template root path" do
+      subject.templates_root.should_not be_empty
+      subject.templates_root.should start_with Refinery::Seeds.resources_root
+      subject.templates_root.should end_with 'pages'
+    end
+
+  end
+
   context "builds pages" do
     before do
       # TODO: test when force is not true

@@ -14,14 +14,9 @@ module Refinery::Seeds
       @attributes = attributes.merge(title: title)
     end
 
-    def templates_root
-      File.join(Refinery::Seeds.resources_root, 'pages')
-    end
-
     def template_search_path
       File.join(
-        templates_root,
-        @page_builder.title.underscored_word,
+        @page_builder.template_search_path,
         "#{@title.underscored_word}.*"
       )
     end
