@@ -25,13 +25,12 @@ module Refinery::Seeds
     end
 
     def image_paths
-      unless File.directory?(images_root)
-        raise ImageLoadError.new(
-          "images root #{images_root} is not a directory")
-      end
-
-      Dir[image_search_path].select do |path|
-        File.file?(path) && File.readable?(path)
+      if File.directory?(images_root)
+        Dir[image_search_path].select do |path|
+          File.file?(path) && File.readable?(path)
+        end
+      else
+        []
       end
     end
 
