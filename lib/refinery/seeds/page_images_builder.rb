@@ -48,7 +48,7 @@ module Refinery::Seeds
       begin
         require 'refinery/page_images'
       rescue LoadError
-        $stdout.puts "Trying to load page-images but can't load refinery/page_images"
+        $stderr.puts "Trying to load page-images but can't load refinery/page_images"
         return
       end
 
