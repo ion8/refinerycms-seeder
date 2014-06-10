@@ -25,18 +25,14 @@ module Refinery::Seeds
     end
 
     def image_paths
-      if File.directory?(images_root)
-        Dir[image_search_path].select do |path|
-          File.file?(path) && File.readable?(path)
-        end
-      else
-        []
+      Dir[image_search_path].select do |path|
+        File.file?(path) && File.readable?(path)
       end
     end
 
     def caption_template_for_image(image_path)
       path = Dir[image_path.sub(/(.*)\..+$/, '\1.html.erb')].first
-      path if File.file?(path) && File.readable?(path)
+      path if path && File.file?(path) && File.readable?(path)
     end
 
     def render_caption(template_path)
